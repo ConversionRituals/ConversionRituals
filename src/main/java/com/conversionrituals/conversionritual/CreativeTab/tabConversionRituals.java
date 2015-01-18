@@ -6,6 +6,8 @@ import net.minecraft.item.Item;
 
 public class tabConversionRituals extends CreativeTabs{
 	
+	// A la ISIS: 'FAHK YUO'
+	
 	public static tabConversionRituals tabCR = new tabConversionRituals();
 	
 	public tabConversionRituals() {
