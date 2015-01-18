@@ -1,0 +1,12 @@
+tile.ritualBlock.name=Ritual Block
+tile.brokenRitualBlock.name=Broken Ritual Block
+
+tile.emeraldRitual.name=Emerald Ritual
+
+
+item.ritualCore.name=Ritual Core
+item.brokenRitualCore.name=Broken Ritual Core
+item.ritualPowerStaff.name=Ritual Power Staff
+
+
+itemGroup.tabConversionRituals=Conversion Rituals Tab
