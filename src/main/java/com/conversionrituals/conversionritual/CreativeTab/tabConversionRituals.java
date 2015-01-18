@@ -6,14 +6,12 @@ import net.minecraft.item.Item;
 
 public class tabConversionRituals extends CreativeTabs{
 	
-	// A la ISIS: 'FAHK YUO'
-	
 	public static tabConversionRituals tabCR = new tabConversionRituals();
 	
 	public tabConversionRituals() {
 		super("tabConversionRituals");
 	}
-
+	
 	@Override
 	public Item getTabIconItem() {
 		return Item.getItemFromBlock(Blocks.obsidian);
