@@ -41,47 +41,8 @@ public class BlockRitualBlock extends BlockConversionRituals{
 				it = player.inventory.getStackInSlot(player.inventory.currentItem).getItem();
 			}catch(NullPointerException e){
 				e.printStackTrace();
-			}	
-
-			if(it == MainItemRegistry.ritualPowerStaff){
-
-				int maxConversions = 4;
-
-				for(int k = 7; k > 0; k--){
-					for(int l = 7; l > 0; l--){
-						Block currentBlock = world.getBlock(x + k - 4, y - 1, z + l - 4);
-
-						if(currentBlock == Blocks.iron_block){
-							maxConversions += 6;
-						}else if(currentBlock == Blocks.gold_block){
-							maxConversions += 9;
-						}else if(currentBlock == Blocks.diamond_block){
-							maxConversions += 32;
-						}
-					}
-				}
-
-				player.addChatMessage(new ChatComponentText("Total conversions possible with this setup : " + maxConversions));
-				return true;
-
-			}else{
-
-				return checkForRitual(world, x, y, z, player);
-
 			}
-
-		}
-
-	}
-
-	private boolean checkForRitual(World world, int x, int y, int z, EntityPlayer player){
-		return checkForEmeraldRitual(world, x, y, z, player);
-	}
-
-	private boolean checkForEmeraldRitual(World world, int x, int y, int z, EntityPlayer player){
-		if(world.getBlock(x, y - 1, z) == Blocks.lapis_block){
-
-			int totalConversion = 0;
+			
 			int maxConversions = 4;
 
 			for(int k = 7; k > 0; k--){
@@ -97,6 +58,30 @@ public class BlockRitualBlock extends BlockConversionRituals{
 					}
 				}
 			}
+
+			if(it == MainItemRegistry.ritualPowerStaff){
+
+				player.addChatMessage(new ChatComponentText("Total conversions possible with this setup : " + maxConversions));
+				return true;
+
+			}else{
+
+				return checkForRitual(world, x, y, z, player, maxConversions);
+
+			}
+
+		}
+
+	}
+
+	private boolean checkForRitual(World world, int x, int y, int z, EntityPlayer player, int maxConversions){
+		return checkForEmeraldRitual(world, x, y, z, player, maxConversions);
+	}
+
+	private boolean checkForEmeraldRitual(World world, int x, int y, int z, EntityPlayer player, int maxConversions){
+		if(world.getBlock(x, y - 1, z) == Blocks.lapis_block){
+
+			int totalConversion = 0;
 
 			for(int i = 7; i > 0; i--){
 				for(int j = 7; j > 0; j--){
