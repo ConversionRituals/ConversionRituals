@@ -48,9 +48,9 @@ public class MainItemRegistry {
 			'R', new ItemStack(brokenRitualCore, 1)
 		});
 		GameRegistry.addShapedRecipe(new ItemStack(ritualPowerStaff, 1), new Object[]{
-			"C  ",
+			"  C",
 			" B ",
-			"  B",
+			"B  ",
 			'C', new ItemStack(ritualCore, 1),
 			'B', new ItemStack(Items.blaze_rod)
 		});

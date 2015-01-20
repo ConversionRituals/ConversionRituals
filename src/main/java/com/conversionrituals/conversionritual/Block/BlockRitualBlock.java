@@ -9,6 +9,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.MathHelper;
@@ -26,9 +27,12 @@ public class BlockRitualBlock extends BlockConversionRituals{
 		empowermentBlocks = new LinkedList<BlockEmpowermentBlock>();
 		
 		//Initializing Blocks that can be used for increasing the max. conversions possible
+		empowermentBlocks.add(new BlockEmpowermentBlock(Blocks.quartz_block, 2));
 		empowermentBlocks.add(new BlockEmpowermentBlock(Blocks.iron_block, 6));
 		empowermentBlocks.add(new BlockEmpowermentBlock(Blocks.gold_block, 9));
 		empowermentBlocks.add(new BlockEmpowermentBlock(Blocks.diamond_block, 32));
+		empowermentBlocks.add(new BlockEmpowermentBlock(Blocks.emerald_block, 48));
+		empowermentBlocks.add(new BlockEmpowermentBlock(Blocks.bedrock, 8192));
 	}
 
 	@Override
@@ -151,7 +155,7 @@ public class BlockRitualBlock extends BlockConversionRituals{
 			world.setBlock(x, y, z, MainBlockRegistry.brokenRitualBlock);
 			
 			//Prints to the player that the ritual was successful performed
-			player.addChatMessage(new ChatComponentText("Ritual successful performed ! You've converted " + conversionsDone + " diamonds !"));
+			player.addChatMessage(new ChatComponentText("Ritual successful performed !"));
 			
 			//Resets how many conversions have been performed
 			conversionsDone = 0;
