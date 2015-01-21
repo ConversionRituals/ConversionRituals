@@ -34,9 +34,8 @@ public class BlockRitualBlock extends BlockConversionRituals{
 		empowermentBlocks.add(new BlockEmpowermentBlock(Blocks.emerald_block, 48));
 		empowermentBlocks.add(new BlockEmpowermentBlock(Blocks.bedrock, 8192));
 	}
-
-	@Override
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int p_149727_6_, float p_149727_7_, float p_149727_8_, float p_149727_9_) {
+	
+	public boolean activate(World world, int x, int y, int z, EntityPlayer player){
 		if(world.isRemote){
 			return false;
 		}else{
@@ -65,18 +64,61 @@ public class BlockRitualBlock extends BlockConversionRituals{
 			}
 			
 			//Checks of the current held item is null (empty hand) or is anything but the ritual power staff
-			if(player.inventory.getCurrentItem() == null || (player.inventory.getCurrentItem().getItem() != MainItemRegistry.ritualPowerStaff)){
+//			if(player.inventory.getCurrentItem() == null || (player.inventory.getCurrentItem().getItem() != MainItemRegistry.ritualPowerStaff)){
 			
 				//Checks if a ritual is activatable
 				return checkForRitual(world, x, y, z, player, maxConversions);
-			}else{
-			
-				//If it's the ritual power staff it print the current max. possible conversion with the current block to the player
-				player.addChatMessage(new ChatComponentText("Total conversions possible with this setup : " + maxConversions));
-				return true;
-			}
+//			}else{
+//			
+//				//If it's the ritual power staff it print the current max. possible conversion with the current block to the player
+//				player.addChatMessage(new ChatComponentText("Total conversions possible with this setup : " + maxConversions));
+//				return true;
+//			}
 		}
 	}
+
+//	@Override
+//	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int p_149727_6_, float p_149727_7_, float p_149727_8_, float p_149727_9_) {
+//		if(world.isRemote){
+//			return false;
+//		}else{
+//			
+//			//max. conversions possible
+//			int maxConversions = 4;
+//			
+//			//Looping through all blocks beneath the ritual altar
+//			for(int k = diameter; k > 0; k--){
+//				for(int l = diameter; l > 0; l--){
+//				
+//					//Getting from the viewing point of the ritual altar, because it's staring at the top left corner
+//					Block currentBlock = world.getBlock(x + k - (MathHelper.floor_double(diameter / 2) + 1), y - 1, z + l - (MathHelper.floor_double(diameter / 2) + 1));
+//					
+//					//Looping through all the empowerment blocks
+//					for(int j = 0; j < empowermentBlocks.size(); j++){
+//					
+//						//If one of the empowerment blocks matches the current block
+//						if(currentBlock == empowermentBlocks.get(j).getBlock()){
+//							
+//							//Increase the max. conversions possible by the empowerment level of that block
+//							maxConversions += empowermentBlocks.get(j).getEmpowermentLevel();
+//						}
+//					}
+//				}
+//			}
+//			
+//			//Checks of the current held item is null (empty hand) or is anything but the ritual power staff
+//			if(player.inventory.getCurrentItem() == null || (player.inventory.getCurrentItem().getItem() != MainItemRegistry.ritualPowerStaff)){
+//			
+//				//Checks if a ritual is activatable
+//				return checkForRitual(world, x, y, z, player, maxConversions);
+//			}else{
+//			
+//				//If it's the ritual power staff it print the current max. possible conversion with the current block to the player
+//				player.addChatMessage(new ChatComponentText("Total conversions possible with this setup : " + maxConversions));
+//				return true;
+//			}
+//		}
+//	}
 	
 	
 	private boolean checkForRitual(World world, int x, int y, int z, EntityPlayer player, int maxConversions){

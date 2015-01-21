@@ -23,7 +23,7 @@ public class MainItemRegistry {
 	public static void initItems(){
 		ritualCore = new ItemConversionRituals().setUnlocalizedName("ritualCore").setTextureName(RefStrings.MODID + ":" + "ritualCore");
 		brokenRitualCore = new ItemConversionRituals().setUnlocalizedName("brokenRitualCore").setTextureName(RefStrings.MODID + ":" + "brokenRitualCore");
-		ritualPowerStaff = new ItemConversionRituals().setUnlocalizedName("ritualPowerStaff").setTextureName(RefStrings.MODID + ":" + "ritualPowerStaff");
+		ritualPowerStaff = new ItemRitualPowerStaff().setUnlocalizedName("ritualPowerStaff").setTextureName(RefStrings.MODID + ":" + "ritualPowerStaff");
 	}
 	
 	public static void registerItems(){
@@ -44,7 +44,7 @@ public class MainItemRegistry {
 			" G ",
 			"GRG",
 			" G ",
-			'G', new ItemStack(Blocks.glowstone, 1),
+			'G', new ItemStack(Items.glowstone_dust, 1),
 			'R', new ItemStack(brokenRitualCore, 1)
 		});
 		GameRegistry.addShapedRecipe(new ItemStack(ritualPowerStaff, 1), new Object[]{
@@ -52,7 +52,10 @@ public class MainItemRegistry {
 			" B ",
 			"B  ",
 			'C', new ItemStack(ritualCore, 1),
-			'B', new ItemStack(Items.blaze_rod)
+			'B', new ItemStack(Items.blaze_rod, 1)
+		});
+		GameRegistry.addShapelessRecipe(new ItemStack(ritualPowerStaff, 1), new Object[]{
+			new ItemStack(ritualPowerStaff, 1, 1)
 		});
 	}
 

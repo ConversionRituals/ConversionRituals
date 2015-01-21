@@ -1,5 +1,7 @@
 package com.conversionrituals.conversionritual.CreativeTab;
 
+import com.conversionrituals.conversionritual.Block.MainBlockRegistry;
+
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -14,7 +16,7 @@ public class tabConversionRituals extends CreativeTabs{
 	
 	@Override
 	public Item getTabIconItem() {
-		return Item.getItemFromBlock(Blocks.obsidian);
+		return Item.getItemFromBlock(MainBlockRegistry.ritualBlock);
 	}
 
 }
