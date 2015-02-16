@@ -10,3 +10,7 @@ item.ritualPowerStaff.name=Ritual Power Staff
 
 
 itemGroup.tabConversionRituals=Conversion Rituals Tab
+
+key.categories.conversionrituals=Conversion Rituals
+
+key.conversionrituals.clearRitualPowerStaff=Clear Ritual Power Staff

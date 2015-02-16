@@ -2,15 +2,15 @@ package com.conversionrituals.conversionritual.Proxy;
 
 public class CommonProxy {
 	
-	public void registerRenderInfo(){
+	public void preInit(){
 		
 	}
 	
-	public void registerNetworkStuff(){
+	public void registerRenderer(){
 		
 	}
 	
-	public void registerTileEntities(){
+	public void registerTileEntitySpecialRenderer(){
 		
 	}
 }

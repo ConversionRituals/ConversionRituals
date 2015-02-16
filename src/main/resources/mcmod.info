@@ -1,14 +1,14 @@
 [
 {
-  "modid": "examplemod",
-  "name": "Example Mod",
-  "description": "Example placeholder mod.",
-  "version": "${version}",
-  "mcversion": "${mcversion}",
+  "modid": "conversionrituals",
+  "name": "Conversion Rituals",
+  "description": "A mod which uses powerful Rituals to convert Items.",
+  "version": "0.1",
+  "mcversion": "1.7.10",
   "url": "",
   "updateUrl": "",
-  "authorList": ["ExampleDude"],
-  "credits": "The Forge and FML guys, for making this example",
+  "authorList": ["SHoCKYCooKIE, SirAmNot"],
+  "credits": "Us.",
   "logoFile": "",
   "screenshots": [],
   "dependencies": []

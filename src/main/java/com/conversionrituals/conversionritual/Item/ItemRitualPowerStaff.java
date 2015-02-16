@@ -2,16 +2,17 @@ package com.conversionrituals.conversionritual.Item;
 
 import java.util.List;
 
-import com.conversionrituals.conversionritual.Block.BlockRitualBlock;
-import com.conversionrituals.conversionritual.Block.MainBlockRegistry;
-import com.conversionrituals.conversionritual.Lib.RefStrings;
-
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+
+import com.conversionrituals.conversionritual.Block.BlockRitualBlock;
+import com.conversionrituals.conversionritual.Block.MainBlockRegistry;
+import com.conversionrituals.conversionritual.Client.KeyBindings;
+import com.conversionrituals.conversionritual.Lib.RefStrings;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -27,6 +28,7 @@ public class ItemRitualPowerStaff extends ItemConversionRituals{
 	private int bindedBlockX;
 	private int bindedBlockY;
 	private int bindedBlockZ;
+	private String ritual;
 
 	/**
 	 * Callback for item usage. If the item does something special on right clicking, he will have one of those. Return
@@ -63,6 +65,12 @@ public class ItemRitualPowerStaff extends ItemConversionRituals{
 					this.bindedBlockY = -1;
 					this.bindedBlockZ = -1;
 				}
+			}else if((this.isBinded && player.isSneaking()) && KeyBindings.CLEAR.isPressed()){
+				setDamage(itemstack, 0);
+				this.isBinded = false;
+				this.bindedBlockX = -1;
+				this.bindedBlockY = -1;
+				this.bindedBlockZ = -1;
 			}
 		}
 		return itemstack;
@@ -99,5 +107,6 @@ public class ItemRitualPowerStaff extends ItemConversionRituals{
 			list.add("Put in Crafting Grid to unbind !");
 		}
 	}
+	
 
 }

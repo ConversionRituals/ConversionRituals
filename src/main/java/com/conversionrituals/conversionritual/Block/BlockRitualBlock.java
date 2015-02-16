@@ -3,27 +3,38 @@ package com.conversionrituals.conversionritual.Block;
 import java.util.LinkedList;
 import java.util.List;
 
+import TileEntity.TileEntityRitualBlock;
+
+import com.conversionrituals.conversionritual.CreativeTab.tabConversionRituals;
+
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockContainer;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.AdvancedModelLoader;
 
-import com.conversionrituals.conversionritual.Item.MainItemRegistry;
-
-public class BlockRitualBlock extends BlockConversionRituals{
+public class BlockRitualBlock extends BlockContainer {
 	
 	LinkedList<BlockEmpowermentBlock> empowermentBlocks;
 	
 	int diameter = 7;
 	
 	public BlockRitualBlock() {
+		super(Material.rock);
+		setCreativeTab(tabConversionRituals.tabCR);
+		setHardness(1.5F);
+		setResistance(10.0F);
+		setStepSound(soundTypePiston);
+		
 		empowermentBlocks = new LinkedList<BlockEmpowermentBlock>();
 		
 		//Initializing Blocks that can be used for increasing the max. conversions possible
@@ -35,7 +46,23 @@ public class BlockRitualBlock extends BlockConversionRituals{
 		empowermentBlocks.add(new BlockEmpowermentBlock(Blocks.bedrock, 8192));
 	}
 	
-	public boolean activate(World world, int x, int y, int z, EntityPlayer player){
+	public TileEntity createNewTileEntity(World world, int par1) {
+		return new TileEntityRitualBlock();
+	}
+	
+	public int getRenderType(){
+		return -1;
+	}
+	
+	public boolean isOpaqueCube(){
+		return false;
+	}
+	
+	public boolean renderAsNormalBlock(){
+		return false;
+	}
+	
+	public boolean activate(World world, int x, int y, int z, EntityPlayer player){		
 		if(world.isRemote){
 			return false;
 		}else{
@@ -122,8 +149,20 @@ public class BlockRitualBlock extends BlockConversionRituals{
 	
 	
 	private boolean checkForRitual(World world, int x, int y, int z, EntityPlayer player, int maxConversions){
-		//Checks if the emerald ritual is possible to perform
-		return checkForEmeraldRitual(world, x, y, z, player, maxConversions);
+		//Performs emerald Ritual if possible
+		boolean emeraldRitual =  checkForEmeraldRitual(world, x, y, z, player, maxConversions);
+		
+		//If the emerald Ritual was performed return true, else goes on
+		if(emeraldRitual) return true;
+		
+		//Performs catalystCore Ritual if possible
+		boolean catalystCoreRitual = checkForCatalystCoreRitual(world, x, y, z, player, maxConversions);
+		
+		//If the catalystCore Ritual was performed return true, else goes on
+		if(catalystCoreRitual) return true;
+		
+		//If no Ritual was performed returns false
+		return false;
 	}
 	
 	private boolean checkForEmeraldRitual(World world, int x, int y, int z, EntityPlayer player, int maxConversions){
@@ -208,6 +247,92 @@ public class BlockRitualBlock extends BlockConversionRituals{
 			
 			//Is the required block to perform this ritual not present it prints it to the player
 			player.addChatMessage(new ChatComponentText("Lapis Lazuli Block, required for activation, is missing !"));
+			return false;
+		}
+	}
+	
+	private boolean checkForCatalystCoreRitual(World world, int x, int y, int z, EntityPlayer player, int maxConversions){
+		
+		//Checks if the required block (Lapis Lazuli) for this ritual is present
+		if(world.getBlock(x, y - 1, z) == Blocks.diamond_block){
+			
+			//How many conversions have been performed
+			int conversionsDone = 0;
+			
+			//Setting from the viewing point of the ritual altar, because it's staring at the top left corner
+			for(int i = diameter; i > 0; i--){
+				for(int j = diameter; j > 0; j--){
+					
+					//Sets all blocks in the diameter² beneath it to mossy cobblestone 
+					world.setBlock(x + i - (MathHelper.floor_double(diameter / 2) + 1), y - 1, z + j - (MathHelper.floor_double(diameter / 2) + 1), Blocks.mossy_cobblestone);
+				}
+			}
+			
+			//Creates a new bounding box around the ritual altar
+			AxisAlignedBB area = AxisAlignedBB.getBoundingBox((double)(x - (MathHelper.floor_double(diameter / 2) + 1)), (double)(y - 1), (double)(z - (MathHelper.floor_double(diameter / 2) + 1)), (double)(x + (MathHelper.floor_double(diameter / 2) + 1)), (double)(y + 1), (double)(z + (MathHelper.floor_double(diameter / 2) + 1)));
+		
+			//Creates a list of all EntitiyItems in this bounding box
+			List entityItemsInArea = world.getEntitiesWithinAABB(EntityItem.class, area);
+			
+			//Loops through all EntitiyItems
+			for(int a = 0; a < entityItemsInArea.size(); a++){
+				
+				//Checks if it can still perform a conversion
+				if(conversionsDone <= maxConversions - 1){
+					
+					//Creates a new EntityItem for usage
+					EntityItem currentEntityItem = (EntityItem)entityItemsInArea.get(a);
+					
+					//Checks if the current EntityItem is a diamond
+					if(currentEntityItem.getEntityItem().getItem() == Items.diamond){
+						
+						//Checks if the stack size of the current EntityItem is less or equal then the left conversions
+						if(currentEntityItem.getEntityItem().stackSize <= maxConversions - conversionsDone){
+							
+							//Adds the stack size of the current item stack to the total performed conversions
+							conversionsDone += currentEntityItem.getEntityItem().stackSize;
+							
+							//Sets the item and stack size to the new EntityItem
+							currentEntityItem.setEntityItemStack(new ItemStack(Items.emerald, currentEntityItem.getEntityItem().stackSize));
+							
+							//Places a cobblestone beneath the converted EntityItem
+							world.setBlock(MathHelper.floor_double(currentEntityItem.posX), MathHelper.floor_double(currentEntityItem.posY) - 1, MathHelper.floor_double(currentEntityItem.posZ), Blocks.cobblestone);
+							
+						}else{
+							
+							//Creates a new EntityItem with the stack size of the left conversions
+							EntityItem newEntityItem = new EntityItem(world, currentEntityItem.posX, currentEntityItem.posY, currentEntityItem.posZ, new ItemStack(Items.emerald, (maxConversions) - conversionsDone));
+							
+							//Sets the stack size to the new Item according to the old stack size - the left ones
+							currentEntityItem.setEntityItemStack(new ItemStack(Items.diamond, currentEntityItem.getEntityItem().stackSize - ((maxConversions) - conversionsDone)));
+							
+							//Spawns the new EntityItem into the world
+							world.spawnEntityInWorld(newEntityItem);
+							
+						}
+						
+					}
+					
+					//Updates the EntityItem in the List
+					entityItemsInArea.set(a, currentEntityItem);
+				}
+			}
+			
+			//Sets the ritual block to used form
+			world.setBlock(x, y, z, MainBlockRegistry.brokenRitualBlock);
+			
+			//Prints to the player that the ritual was successful performed
+			player.addChatMessage(new ChatComponentText("Ritual successful performed !"));
+			
+			//Resets how many conversions have been performed
+			conversionsDone = 0;
+			
+			return true;
+		
+		}else{
+			
+			//Is the required block to perform this ritual not present it prints it to the player
+			player.addChatMessage(new ChatComponentText("Diamond Block, required for activation, is missing !"));
 			return false;
 		}
 	}
